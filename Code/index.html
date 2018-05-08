@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+  <title>Mohr's Circle: Stress Simulator</title>
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0"/>
+
+<script src = "../Libraries/d3.v4.min.js"></script>
+<script src="../Libraries/d3-selection-multi.v1.min.js"></script>
+<script src = "../Libraries/math.min.js"></script>
+<script src="../Libraries/jquery-3.2.1.min.js" ></script>
+<script src="../Libraries/intro.min.js" ></script>
+
+<script src="createMohrsSimulator.js" ></script>
+<script src="dial.js" ></script>
+<script src="circle.js" ></script>
+<script src="equation.js" ></script>
+<script src="idealModel.js" ></script>
+<script src="schematic.js" ></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-104287448-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<style>
+body{ user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
+body{ margin: 0px; }
+.idealModel_circle{ fill: #BBB; stroke: #AAA; cursor: pointer; }
+.idealModel_circle:hover{ fill: #888; stroke: #AAA; cursor: pointer; }
+.idealModel_circle:active{ fill: #666; stroke: #AAA; cursor: pointer; }
+</style>
+
+<link rel="stylesheet" type="text/css" href="../stylesheet/introjs.min.css">
+<link rel="stylesheet" type="text/css" href="../stylesheet/introjs-modern.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body></body>
+
+<script type="text/javascript">
+
+/******************************************************************/
+
+d3.select(window).on("contextmenu", function(){
+  d3.event.preventDefault(); d3.event.stopPropagation(); return false
+})
+
+d3.select(window).on("resize", function(){ resize(); })
+
+/******************************************************************/
+
+degreeSymbol = String.fromCharCode(176);
+zetaSymbol = String.fromCharCode(958);
+omegaSymbol = String.fromCharCode(969);
+
+/******************************************************************/
+
+d3.select("body").styles({ "background": "#e4f1fc" })
+title_bar = d3.select("body").append("div").styles({ "position": "absolute", width: "100%", "height": "5%", "background": "#e3f2ff", "box-shadow": "0px 4px 4px #c6e5ff", "z-index": 10 })
+title_bar.append("text").styles({ "position": "absolute", "margin-left": "2.5%", "margin-top": "10px", "font-size": "2.5vh", "font-weight": "normal", "text-anchor": "middle", "color": "#666" }).text("Mohr's Circle: Stress Simulator")
+title_bar.append("text")
+  .styles({ "position": "absolute", "margin-left": "92.5%", "margin-top": "6px", "font-size": "4vh", "font-weight": "normal", "text-anchor": "middle", "color": "#666" })
+  .append("i")
+  .attrs({ "class": "fa fa-question-circle", "aria-hidden": true })
+  .styles({ "cursor": "hand" })
+  .on("click", function(){
+    introJs().start();
+  })
+
+function create(){
+  simulator = new createMohrsSimulator();
+  circle = new MohrsSimulatorCircle(simulator);
+  circle.create();
+  equation = new MohrsSimulatorEquation(simulator);
+  equation.create();
+  idealModel = new idealModelMohrsSimlator(simulator);
+  idealModel.create();
+  schematic = new createSchematic(simulator);
+  schematic.create();
+}
+create();
+
+function update_start(){}
+
+function update(){
+  simulator.update();
+  circle.update();
+  equation.update();
+  idealModel.update();
+  schematic.update();
+}
+
+function update_end(){}
+
+function resize(){
+  circle.resize();
+  equation.resize();
+  idealModel.resize();
+  schematic.resize();
+}
+
+function simulate(){
+  simulator.simulate();
+  circle.simulate();
+  equation.simulate();
+  idealModel.simulate();
+  schematic.simulate();
+}
+
+</script>
